@@ -6,7 +6,9 @@ namespace ariel
 {
 
     // SideCrossIterator
-    MagicalContainer::SideCrossIterator::SideCrossIterator( MagicalContainer& container) : IteratorBase(container), reverse(true), index(0), counter(0) { _type = 0; }
+    MagicalContainer::SideCrossIterator::SideCrossIterator( MagicalContainer& container) 
+    : IteratorBase(container), reverse(true), index(0)  { _type = SIDE_ITER; }
+
 
     MagicalContainer::SideCrossIterator& MagicalContainer::SideCrossIterator::begin() 
     {
@@ -33,19 +35,16 @@ namespace ariel
 
         if (reverse) 
         {
-            // cout << "\nThe index cross ordered:" << index << endl;
            _current = _container.size() -1 -index++;
            reverse = false;
         }
         else 
         {
-            // cout << "\nThe index in ordered:" << index << endl;
              _current = index;   
             reverse = true;
         }
         
         counter++;
-        // cout << "The counter is:" << counter << endl;
         return *this;
     }
 

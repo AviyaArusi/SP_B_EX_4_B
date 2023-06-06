@@ -7,7 +7,7 @@ namespace ariel
 
    // AscendingIterator
 
-    MagicalContainer::AscendingIterator::AscendingIterator( MagicalContainer& container) : IteratorBase(container)  { _type = 0;}
+    MagicalContainer::AscendingIterator::AscendingIterator( MagicalContainer& container) : IteratorBase(container)  { _type = ASC_ITER;}
 
     MagicalContainer::AscendingIterator& MagicalContainer::AscendingIterator::begin() 
     {

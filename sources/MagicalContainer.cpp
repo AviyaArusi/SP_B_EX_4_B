@@ -1,7 +1,5 @@
 #include "MagicalContainer.hpp"
 
-
-
 using namespace std;
 namespace ariel 
 {
@@ -19,23 +17,6 @@ namespace ariel
         }
         return true;
     }
-
-    // void MagicalContainer::printPrime(const MagicalContainer &other)
-    // {
-    //     // for (size_t i = 0; i < other.size(); ++i) 
-    //     // {
-    //     //     if (isPrime(other._elements.at(i)->data)) 
-    //     //     {
-    //     //         cout <<"In index" << i << "the element: " << other._elements.at(i)->data << endl;
-    //     //     }
-    //     // }
-    //     size_t index = other._firstPrime;
-    //     while (index <= other._lastPrime) 
-    //     {
-    //             cout <<"In index" << index << "the element: " << other._elements.at(index)->data << endl;
-    //             index = other._elements.at(index)->nextPrime;
-    //     }
-    // }
 
     pNode creatNode(int data)
     {
@@ -86,7 +67,6 @@ namespace ariel
         for (auto element : _elements)
         {
             free(element);
-            // delete element;
         }
 
         _elements.clear();
@@ -170,9 +150,11 @@ namespace ariel
 
     vector<pNode>& MagicalContainer::getElements(){ return _elements; }
 
+
     // IteratorBase
 
-    MagicalContainer::IteratorBase::IteratorBase(MagicalContainer& container) : _container(container), _current(0) {}
+    MagicalContainer::IteratorBase::IteratorBase(MagicalContainer& container) 
+    : _container(container), _current(0), counter(0) {}
 
     MagicalContainer::IteratorBase& MagicalContainer::IteratorBase::operator=(const MagicalContainer::IteratorBase& other) 
     { 
@@ -188,25 +170,34 @@ namespace ariel
     bool MagicalContainer::IteratorBase::operator==(const IteratorBase& other) const 
     {
         if(_type != other._type) { throw runtime_error("Can't use boolean opertor between 2 defference Iterators!\n"); }
+        if(&_container != &other._container) { throw runtime_error("Error!\n"); }
+
         return _current == other._current;
     }
 
     bool MagicalContainer::IteratorBase::operator!=(const IteratorBase& other) const 
     {
         if(_type != other._type) { throw runtime_error("Can't use boolean opertor between 2 defference Iterators!\n"); }
+        if(&_container != &other._container) { throw runtime_error("Error!\n"); }
         return !(*this == other);
     }
 
     bool MagicalContainer::IteratorBase::operator>(const IteratorBase& other) const 
     {
         if(_type != other._type) { throw runtime_error("Can't use boolean opertor between 2 defference Iterators!\n"); }
-        return _current > other._current;
+        if(&_container != &other._container) { throw runtime_error("Error!\n"); }
+
+        if(_type == SIDE_ITER){ return counter > other.counter;}
+        else { return _current > other._current; }
     }
 
     bool MagicalContainer::IteratorBase::operator<(const IteratorBase& other) const 
     {
         if(_type != other._type) { throw runtime_error("Can't use boolean opertor between 2 defference Iterators!\n"); }
-        return _current < other._current;
+        if(&_container != &other._container) { throw runtime_error("Error!\n"); }
+
+        if(_type == 2){ return counter < other.counter;}
+        else { return _current < other._current; }
     }
 
     int MagicalContainer::IteratorBase::operator*() 

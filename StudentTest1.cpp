@@ -597,3 +597,31 @@ TEST_CASE("operator= throws when iterators are pointing at different containers"
 }
 
 
+//checking that the iterators dont impact each other
+TEST_CASE("Multiple Iterators Test") {
+    MagicalContainer container;
+    container.addElement(1);
+    container.addElement(2);
+    container.addElement(4);
+    container.addElement(5);
+    container.addElement(14);    // 1,14,2,5,4
+
+    SUBCASE("SideCross Iterators") {
+        MagicalContainer::SideCrossIterator it1(container);
+        MagicalContainer::SideCrossIterator it2(container);
+
+        ++it1;
+        ++it1;
+        ++it1;
+        ++it1;
+
+        ++it2;
+        // ++it2;
+
+    
+        CHECK(it1 > it2);
+        // cout<< "it1:" << *it1 << " is bigger then it2:" << *it2 << endl;
+    }
+}
+
+

@@ -12,6 +12,12 @@
 #define NODE_SIZE sizeof(Node)
 #define MAX_VALUE  std::numeric_limits<long>::max()
 
+const int ASC_ITER  = 1;
+const int SIDE_ITER  = 2;
+const int PRIME_ITER = 3;
+
+
+
 namespace ariel 
 {
     typedef struct Node
@@ -50,9 +56,6 @@ namespace ariel
         void addElement(int);
         void removeElement(int);
         size_t size() const;
-        //##########################
-        // void printPrime(const MagicalContainer &other);
-        //#########################
 
         std::vector<pNode>& getElements();
 
@@ -80,8 +83,10 @@ namespace ariel
 
         MagicalContainer& _container;
         std::size_t _current;
-        int _type; // 0 - Acs, 1 - SideCross, 2 - Prime
+        int _type; // 1 - Acs, 2 - SideCross, 3 - Prime
+        int counter; // Count the ++ operator for SideCrossIterator.
     };
+
 
 
     // AscendingIterator
@@ -89,10 +94,10 @@ namespace ariel
     {
     public:
         AscendingIterator(MagicalContainer&);
-
         AscendingIterator& begin() override;
         AscendingIterator& end() override;
     };
+
 
 
     // SideCrossIterator
@@ -100,27 +105,28 @@ namespace ariel
     {
     public:
         SideCrossIterator(MagicalContainer&);
-
         SideCrossIterator& begin() override;
         SideCrossIterator& end() override;
+
         SideCrossIterator& operator++() override;
 
     private:
         bool reverse;
         size_t index;
-        int counter;
     };
+
+
 
     // PrimeIterator
     class PrimeIterator : public IteratorBase 
     {
     public:
         PrimeIterator(MagicalContainer&);
-
         PrimeIterator& begin() override;
         PrimeIterator& end() override;
         PrimeIterator& operator++() override;
     };
+
 
 };
 
