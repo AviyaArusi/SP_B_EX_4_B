@@ -24,7 +24,7 @@ namespace ariel
 
     MagicalContainer::SideCrossIterator& MagicalContainer::SideCrossIterator::operator++() 
     {
-        if(counter > _container.size() ) { throw runtime_error("Out of range!\n"); }
+        if(counter >= _container.size() || _current == _container.size() ) { throw runtime_error("Out of range!\n"); }
         if(counter == _container.size()-1)
         {
             _current = _container.size();

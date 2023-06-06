@@ -27,7 +27,7 @@ namespace ariel
 
     MagicalContainer::PrimeIterator& MagicalContainer::PrimeIterator::operator++() 
     {
-        if(_current > _container._lastPrime) { throw runtime_error("Out of range!\n"); }
+        if(_current > _container._lastPrime || _current == _container.size() ) { throw runtime_error("Out of range!\n"); }
 
         if(_container.getElements().at(_current)->nextPrime == MAX_VALUE)
         {
