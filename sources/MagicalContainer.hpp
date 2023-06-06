@@ -50,6 +50,9 @@ namespace ariel
         void addElement(int);
         void removeElement(int);
         size_t size() const;
+        //##########################
+        // void printPrime(const MagicalContainer &other);
+        //#########################
 
         std::vector<pNode>& getElements();
 

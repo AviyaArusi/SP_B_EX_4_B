@@ -7,7 +7,11 @@ namespace ariel
 
     // PrimeIterator
 
-    MagicalContainer::PrimeIterator::PrimeIterator( MagicalContainer& container) : IteratorBase(container) { _type = 0;}
+    MagicalContainer::PrimeIterator::PrimeIterator( MagicalContainer& container) : IteratorBase(container) 
+    { 
+        _type = 0;
+        _current = container._firstPrime;
+    }
 
     MagicalContainer::PrimeIterator& MagicalContainer::PrimeIterator::begin() 
     {

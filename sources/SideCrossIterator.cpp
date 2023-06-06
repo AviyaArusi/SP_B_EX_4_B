@@ -18,14 +18,6 @@ namespace ariel
      MagicalContainer::SideCrossIterator& MagicalContainer::SideCrossIterator::end() 
     {
         _current = _container.size();
-        // if(_container.size() % 2 == 0) 
-        // { 
-        //     _current =  ( (_container.size()+1 )/2 )-1; 
-        // }
-        // else 
-        // { 
-        //     _current =  ( (_container.size()+1 )/2 )-1; 
-        // }
         reverse = true;
         return *this;
     }

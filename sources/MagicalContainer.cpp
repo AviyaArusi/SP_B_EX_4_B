@@ -20,6 +20,23 @@ namespace ariel
         return true;
     }
 
+    // void MagicalContainer::printPrime(const MagicalContainer &other)
+    // {
+    //     // for (size_t i = 0; i < other.size(); ++i) 
+    //     // {
+    //     //     if (isPrime(other._elements.at(i)->data)) 
+    //     //     {
+    //     //         cout <<"In index" << i << "the element: " << other._elements.at(i)->data << endl;
+    //     //     }
+    //     // }
+    //     size_t index = other._firstPrime;
+    //     while (index <= other._lastPrime) 
+    //     {
+    //             cout <<"In index" << index << "the element: " << other._elements.at(index)->data << endl;
+    //             index = other._elements.at(index)->nextPrime;
+    //     }
+    // }
+
     pNode creatNode(int data)
     {
         pNode newNode = (pNode)malloc(NODE_SIZE);
