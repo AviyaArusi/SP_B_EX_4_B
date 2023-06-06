@@ -19,6 +19,7 @@ int main() {
     MagicalContainer::AscendingIterator ascIter(container);
     for (auto it = ascIter.begin(); it != ascIter.end(); ++it) {
         std::cout << *it << ' ';   // 2 3 9 17 25
+        std::cout << "it:" << it._current << " acsIt:" << ascIter._current << std::endl;
     }
     std::cout << std::endl;
 

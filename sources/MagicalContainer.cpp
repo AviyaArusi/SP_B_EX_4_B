@@ -31,15 +31,16 @@ namespace ariel
         return newNode;
     }
 
-    MagicalContainer::MagicalContainer()
-    {
-        _lastPrime = MAX_VALUE;
-        _firstPrime = MAX_VALUE;
-        size_t _size = 0;
-    }
+    MagicalContainer::MagicalContainer() 
+    : _lastPrime(MAX_VALUE), _firstPrime(MAX_VALUE) { _elements.clear(); }
 
-    MagicalContainer::MagicalContainer(const MagicalContainer &other) : _elements(other._elements), _firstPrime(MAX_VALUE)
+    MagicalContainer::MagicalContainer(const MagicalContainer &other) 
+    :  _firstPrime(MAX_VALUE)
     {
+        this->_firstPrime = MAX_VALUE;
+        this->_lastPrime = MAX_VALUE;
+        for (auto element : _elements) { removeElement(element->data); }//Remove the old elements
+
         for (auto element : other._elements) { this->addElement(element->data); }
 
     }
@@ -49,16 +50,21 @@ namespace ariel
 
     MagicalContainer &MagicalContainer::operator=(const MagicalContainer &other)
     {
+        if(this == &other) return *this;
         this->_firstPrime = MAX_VALUE;
+        this->_lastPrime = MAX_VALUE;
+        for (auto element : _elements) { removeElement(element->data); }//Remove the old elements
         for (auto element : other._elements) { this->addElement(element->data); }
         return *this;
     }
 
     MagicalContainer &MagicalContainer::operator=(MagicalContainer &&other) noexcept
     {
-        this->_firstPrime = other._firstPrime;
-        this->_elements = other._elements;
-
+        if(this == &other) return *this;
+        this->_firstPrime = MAX_VALUE;
+        this->_lastPrime = MAX_VALUE;
+        for (auto element : _elements) { removeElement(element->data); }//Remove the old elements
+        for (auto element : other._elements) { this->addElement(element->data); }
         return *this;
     }
 
@@ -159,13 +165,26 @@ namespace ariel
     MagicalContainer::IteratorBase& MagicalContainer::IteratorBase::operator=(const MagicalContainer::IteratorBase& other) 
     { 
         if(_type != other._type) { throw runtime_error("Can't use boolean opertor between 2 defference Iterators!\n"); }
-        if(&_container != &other._container) { throw runtime_error("Error!\n"); }
-
-
+        // if(&_container != &other._container) { throw runtime_error("Error!\n"); }
+        if(this == &other) { return *this; }
+        _container = other._container;
+        _current = other._current;
+        counter = other.counter;
         return *this; 
     }
 
-    MagicalContainer::IteratorBase& MagicalContainer::IteratorBase::operator=( MagicalContainer::IteratorBase&& other) noexcept { return *this; }
+    MagicalContainer::IteratorBase& MagicalContainer::IteratorBase::operator=( MagicalContainer::IteratorBase&& other) noexcept 
+    {
+        if(this == &other) { return *this; }
+        _container = other._container;
+        _current = other._current;
+        counter = other.counter; 
+        return *this; 
+    }
+
+
+
+    // Boolean operators
 
     bool MagicalContainer::IteratorBase::operator==(const IteratorBase& other) const 
     {
