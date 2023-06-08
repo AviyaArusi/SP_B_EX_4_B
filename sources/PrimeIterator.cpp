@@ -4,30 +4,54 @@
 using namespace std;
 namespace ariel 
 {
-
-    // PrimeIterator
-
-    MagicalContainer::PrimeIterator::PrimeIterator( MagicalContainer& container) : IteratorBase(container) 
+    /**
+     * Constructor for PrimeIterator.
+     * Set the type.
+    */
+    MagicalContainer::PrimeIterator::PrimeIterator( MagicalContainer& container) 
+    : IteratorBase(container, container._firstPrime) 
     { 
         _type = PRIME_ITER;
-        _current = container._firstPrime;
+        if(container._firstPrime == MAX_VALUE)
+        {
+            _current = container.size();
+        }
     }
 
-    MagicalContainer::PrimeIterator& MagicalContainer::PrimeIterator::begin() 
+    /**
+     * Constructor for PrimeIterator for the begin() & end() functions return value.
+     * Set the type.
+    */
+    MagicalContainer::PrimeIterator::PrimeIterator( MagicalContainer& container, size_t current) 
+    : IteratorBase(container, current) 
+    { 
+        _type = PRIME_ITER;
+    }
+
+    /**
+     * Return PrimeIterator with current of 0.
+    */
+    MagicalContainer::PrimeIterator MagicalContainer::PrimeIterator::begin() const
     {
-        _current = _container._firstPrime;
-        return *this;
+        return PrimeIterator(_container, 0);
     }
 
-    MagicalContainer::PrimeIterator& MagicalContainer::PrimeIterator::end() 
+    /**
+     * Return PrimeIterator with current of _container.size().
+    */
+    MagicalContainer::PrimeIterator MagicalContainer::PrimeIterator::end() const
     {
-        _current = _container.size();
-        return *this;
+        return PrimeIterator(_container, _container.size());
     }
 
+    /**
+     * Move the _current index to the next prime index.
+     * If _current is in the end of the container, throw error.
+     * Return this
+    */
     MagicalContainer::PrimeIterator& MagicalContainer::PrimeIterator::operator++() 
     {
-        if(_current > _container._lastPrime || _current == _container.size() ) { throw runtime_error("Out of range!\n"); }
+        if( _current == _container.size() ) { throw runtime_error("Out of range!\n"); }
 
         if(_container.getElements().at(_current)->nextPrime == MAX_VALUE)
         {
@@ -42,6 +66,6 @@ namespace ariel
     }
 
 
-}
+} // namespace ariel
 
 

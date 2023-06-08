@@ -3,6 +3,9 @@
 using namespace std;
 namespace ariel 
 {
+    /**
+     * Get integer and return if it is prime.
+    */
     bool isPrime(int n) 
     {
         if (n <= 1) return false;
@@ -18,6 +21,10 @@ namespace ariel
         return true;
     }
 
+    /**
+     * Get data(int) and creat Node using malloc, 
+     * holds if the node is prime or don't.
+    */
     pNode creatNode(int data)
     {
         pNode newNode = (pNode)malloc(NODE_SIZE);
@@ -31,14 +38,26 @@ namespace ariel
         return newNode;
     }
 
+    /**
+     * Constructor for MagicalContainer.
+     * Set the first and last prime to null(MAX_VALUE) - because size_t is unsigned.
+     * Set the _element to 0.
+    */
     MagicalContainer::MagicalContainer() 
-    : _lastPrime(MAX_VALUE), _firstPrime(MAX_VALUE) { _elements.clear(); }
+    : _firstPrime(MAX_VALUE), _lastPrime(MAX_VALUE)
+    { 
+        _elements.clear(); 
+    }
 
+    /**
+     * Copy constructor for MagicalContainer.
+     * Set the first and last prime to null(MAX_VALUE) - because size_t is unsigned.
+     * Remove all the old data.
+     * Deep copy all the other data.
+    */
     MagicalContainer::MagicalContainer(const MagicalContainer &other) 
-    :  _firstPrime(MAX_VALUE)
+    :  _firstPrime(MAX_VALUE), _lastPrime(MAX_VALUE)
     {
-        this->_firstPrime = MAX_VALUE;
-        this->_lastPrime = MAX_VALUE;
         for (auto element : _elements) { removeElement(element->data); }//Remove the old elements
 
         for (auto element : other._elements) { this->addElement(element->data); }
@@ -48,9 +67,18 @@ namespace ariel
     MagicalContainer::MagicalContainer(MagicalContainer &&other) noexcept
         : _elements(other._elements), _firstPrime(other._firstPrime), _lastPrime(other._lastPrime) {}
 
+    /**
+     * Move assignment for MagicalContainer.
+     * If the other is this, to nothing.
+     * Set the first and last prime to null(MAX_VALUE) - because size_t is unsigned.
+     * Remove all the old data.
+     * Deep copy all the other data.
+     * Return this.
+    */
     MagicalContainer &MagicalContainer::operator=(const MagicalContainer &other)
     {
         if(this == &other) return *this;
+
         this->_firstPrime = MAX_VALUE;
         this->_lastPrime = MAX_VALUE;
         for (auto element : _elements) { removeElement(element->data); }//Remove the old elements
@@ -58,9 +86,18 @@ namespace ariel
         return *this;
     }
 
+    /**
+     * Move assignment for MagicalContainer.
+     * If the other is this, to nothing.
+     * Set the first and last prime to null(MAX_VALUE) - because size_t is unsigned.
+     * Remove all the old data.
+     * Deep copy all the other data.
+     * Return this.
+    */
     MagicalContainer &MagicalContainer::operator=(MagicalContainer &&other) noexcept
     {
         if(this == &other) return *this;
+
         this->_firstPrime = MAX_VALUE;
         this->_lastPrime = MAX_VALUE;
         for (auto element : _elements) { removeElement(element->data); }//Remove the old elements
@@ -68,6 +105,10 @@ namespace ariel
         return *this;
     }
 
+    /**
+     * Destructor for MagicalContainer.
+     * Free all the mmalloc element that stay in the _elements vector.
+    */
     MagicalContainer::~MagicalContainer()
     {
         for (auto element : _elements)
@@ -78,9 +119,17 @@ namespace ariel
         _elements.clear();
     }
 
+    /**
+     * Return the size of the _elements vector.
+    */
     size_t MagicalContainer::size() const { return _elements.size(); }
 
-    long MagicalContainer::contains(int elementData)
+    /**
+     * Chek if element is in the container - using algorithem end lambda function.
+     * If it is inside, return the index.
+     * Else return MAX_VALUE.
+    */
+    long MagicalContainer::contains(int elementData) const
     {
         auto it = find_if(_elements.begin(), _elements.end(), [elementData](const pNode node) {
         return node->data == elementData;
@@ -93,6 +142,9 @@ namespace ariel
     return MAX_VALUE;
     }
 
+    /**
+     * Insert node in sorted way to the container.
+    */
     void MagicalContainer::insertSorted(pNode newNode) 
     {
         auto it = lower_bound(_elements.begin(), _elements.end(), newNode,
@@ -105,6 +157,9 @@ namespace ariel
         _elements.insert(it, newNode);
     }   
 
+    /**
+     * Update the prime LinkedList.
+    */
     void MagicalContainer::updatePrimeLinkedList()
     {
         for (size_t i = 0; i < _elements.size(); ++i) 
@@ -127,7 +182,12 @@ namespace ariel
         }
     }
 
-
+    /**
+     * Add element to the container.
+     * Creat Node.
+     * Insert.
+     * Update the prime LinkedList.
+    */
     void MagicalContainer::addElement(int element) 
     {
         if(contains(element) != MAX_VALUE) { return; }
@@ -137,6 +197,11 @@ namespace ariel
         updatePrimeLinkedList();
     }
 
+    /**
+     * Remove element frome the container.
+     * Check first if the element exsist.
+     * Update the prime LinkedList.
+    */
     void MagicalContainer::removeElement(int element) 
     {
         if(_elements.size() == 0){ throw runtime_error("Can't remove from empty Container!\n"); }
@@ -154,84 +219,10 @@ namespace ariel
         free(nodeToRemove);
     }
 
+    /**
+     * Return the _elements vector.
+    */
     vector<pNode>& MagicalContainer::getElements(){ return _elements; }
-
-
-    // IteratorBase
-
-    MagicalContainer::IteratorBase::IteratorBase(MagicalContainer& container) 
-    : _container(container), _current(0), counter(0) {}
-
-    MagicalContainer::IteratorBase& MagicalContainer::IteratorBase::operator=(const MagicalContainer::IteratorBase& other) 
-    { 
-        if(_type != other._type) { throw runtime_error("Can't use boolean opertor between 2 defference Iterators!\n"); }
-        // if(&_container != &other._container) { throw runtime_error("Error!\n"); }
-        if(this == &other) { return *this; }
-        _container = other._container;
-        _current = other._current;
-        counter = other.counter;
-        return *this; 
-    }
-
-    MagicalContainer::IteratorBase& MagicalContainer::IteratorBase::operator=( MagicalContainer::IteratorBase&& other) noexcept 
-    {
-        if(this == &other) { return *this; }
-        _container = other._container;
-        _current = other._current;
-        counter = other.counter; 
-        return *this; 
-    }
-
-
-
-    // Boolean operators
-
-    bool MagicalContainer::IteratorBase::operator==(const IteratorBase& other) const 
-    {
-        if(_type != other._type) { throw runtime_error("Can't use boolean opertor between 2 defference Iterators!\n"); }
-        if(&_container != &other._container) { throw runtime_error("Error!\n"); }
-
-        return _current == other._current;
-    }
-
-    bool MagicalContainer::IteratorBase::operator!=(const IteratorBase& other) const 
-    {
-        if(_type != other._type) { throw runtime_error("Can't use boolean opertor between 2 defference Iterators!\n"); }
-        if(&_container != &other._container) { throw runtime_error("Error!\n"); }
-        return !(*this == other);
-    }
-
-    bool MagicalContainer::IteratorBase::operator>(const IteratorBase& other) const 
-    {
-        if(_type != other._type) { throw runtime_error("Can't use boolean opertor between 2 defference Iterators!\n"); }
-        if(&_container != &other._container) { throw runtime_error("Error!\n"); }
-
-        if(_type == SIDE_ITER){ return counter > other.counter;}
-        else { return _current > other._current; }
-    }
-
-    bool MagicalContainer::IteratorBase::operator<(const IteratorBase& other) const 
-    {
-        if(_type != other._type) { throw runtime_error("Can't use boolean opertor between 2 defference Iterators!\n"); }
-        if(&_container != &other._container) { throw runtime_error("Error!\n"); }
-
-        if(_type == 2){ return counter < other.counter;}
-        else { return _current < other._current; }
-    }
-
-    int MagicalContainer::IteratorBase::operator*() 
-    {
-        return _container.getElements().at(_current)->data;
-    }
-
-    MagicalContainer::IteratorBase& MagicalContainer::IteratorBase::operator++() 
-    {
-        if(_current >= _container.size() ) { throw runtime_error("Index out of range!\n"); }
-        ++_current;
-        return *this;
-    }
-
-
 
 } // namespace ariel
 
